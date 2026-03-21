@@ -70,6 +70,45 @@ curl http://hello-kubernetes.default.svc.cluster.local
 
 いずれかの方法で「Hello, Kubernetes!」が表示されれば成功です。
 
+### 4. セルフヒーリングを体験する
+
+Deployment は `replicas` で指定した数の Pod を常に維持しようとします。
+Pod が消えても自動的に新しい Pod を起動してくれる、この仕組みを**セルフヒーリング（自己修復）**と呼びます。
+
+まず、3つの Pod が Running であることを確認します。
+
+```bash
+kubectl get pods
+```
+
+出力例:
+
+```
+NAME                                READY   STATUS    RESTARTS   AGE
+hello-kubernetes-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
+hello-kubernetes-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
+hello-kubernetes-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
+```
+
+1つの Pod を手動で削除してみます。
+
+```bash
+kubectl delete pod <上の NAME から1つコピー>
+```
+
+別ターミナルで監視すると、削除された Pod の代わりに新しい Pod が即座に作成される様子を観察できます。
+
+```bash
+kubectl get pods -w
+```
+
+複数の Pod を同時に削除しても、全て削除しても、Deployment が `replicas: 3` の状態に自動復旧します。
+
+```bash
+kubectl delete pods -l app=hello-kubernetes
+kubectl get pods -w
+```
+
 ## クリーンアップ
 
 ```bash
