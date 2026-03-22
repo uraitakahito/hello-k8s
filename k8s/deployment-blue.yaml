@@ -1,20 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-k8s-deployment
+  name: hello-k8s-blue
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: hello-kubernetes
+      variant: blue
   template:
     metadata:
       labels:
         app: hello-kubernetes
+        variant: blue
     spec:
       containers:
         - name: web-server
           image: hello-k8s-web:latest
           imagePullPolicy: Never
+          args: ["blue"]
           ports:
             - containerPort: 80
