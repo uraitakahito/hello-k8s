@@ -35,7 +35,7 @@ kubectl get nodes
 OrbStack 環境ではローカルビルドしたイメージを Kubernetes から直接参照できます。
 
 ```bash
-docker build -t hello-kubernetes:latest ./app
+docker build -t hello-k8s-web:latest ./app
 ```
 
 ### 2. Kubernetes にデプロイ
@@ -85,9 +85,9 @@ kubectl get pods
 
 ```
 NAME                                READY   STATUS    RESTARTS   AGE
-hello-kubernetes-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
-hello-kubernetes-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
-hello-kubernetes-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
 ```
 
 1つの Pod を手動で削除してみます。
@@ -118,7 +118,7 @@ kubectl delete -f k8s/
 Docker イメージも不要であれば削除します。
 
 ```bash
-docker rmi hello-kubernetes:latest
+docker rmi hello-k8s-web:latest
 ```
 
 ## トラブルシューティング
@@ -133,7 +133,7 @@ kubectl logs -l app=hello-kubernetes
 ### イメージが見つからない（ErrImagePull）
 
 `imagePullPolicy: Never` が設定されているか確認してください。
-ローカルでイメージがビルド済みか `docker images | grep hello-kubernetes` で確認できます。
+ローカルでイメージがビルド済みか `docker images | grep hello-k8s-web` で確認できます。
 
 ### NodePort に接続できない
 
