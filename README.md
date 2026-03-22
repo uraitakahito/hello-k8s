@@ -63,10 +63,10 @@ curl http://localhost:30080
 OrbStack では Service 名でアクセスできます。
 
 ```bash
-curl http://hello-kubernetes.default.svc.cluster.local
+curl http://hello-k8s-service.default.svc.cluster.local
 ```
 
-またはブラウザで `http://hello-kubernetes.default.svc.cluster.local` を開きます。
+またはブラウザで `http://hello-k8s-service.default.svc.cluster.local` を開きます。
 
 いずれかの方法で「Hello, Kubernetes!」が表示されれば成功です。
 
@@ -138,7 +138,7 @@ kubectl logs -l app=hello-kubernetes
 ### NodePort に接続できない
 
 ```bash
-kubectl get svc hello-kubernetes
+kubectl get svc hello-k8s-service
 ```
 
 PORT 列に `80:30080/TCP` と表示されていることを確認してください。
