@@ -35,7 +35,7 @@ kubectl get nodes
 OrbStack 環境ではローカルビルドしたイメージを Kubernetes から直接参照できます。
 
 ```bash
-docker build -t hello-kubernetes:latest ./app
+docker build -t hello-k8s-web:latest ./app
 ```
 
 ### 2. Kubernetes にデプロイ
@@ -54,6 +54,8 @@ kubectl get pods -w
 
 **方法 A: NodePort でアクセス**
 
+ノードの 30080 番ポート経由で Service に到達します。
+
 ```bash
 curl http://localhost:30080
 ```
@@ -61,12 +63,14 @@ curl http://localhost:30080
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
+この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
+方法 A の `:30080` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
-curl http://hello-kubernetes.default.svc.cluster.local
+curl http://hello-k8s-service.default.svc.cluster.local:8080
 ```
 
-またはブラウザで `http://hello-kubernetes.default.svc.cluster.local` を開きます。
+またはブラウザで `http://hello-k8s-service.default.svc.cluster.local:8080` を開きます。
 
 いずれかの方法で「Hello, Kubernetes!」が表示されれば成功です。
 
@@ -85,9 +89,9 @@ kubectl get pods
 
 ```
 NAME                                READY   STATUS    RESTARTS   AGE
-hello-kubernetes-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
-hello-kubernetes-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
-hello-kubernetes-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
+hello-k8s-deployment-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
 ```
 
 1つの Pod を手動で削除してみます。
@@ -118,7 +122,7 @@ kubectl delete -f k8s/
 Docker イメージも不要であれば削除します。
 
 ```bash
-docker rmi hello-kubernetes:latest
+docker rmi hello-k8s-web:latest
 ```
 
 ## トラブルシューティング
@@ -133,12 +137,12 @@ kubectl logs -l app=hello-kubernetes
 ### イメージが見つからない（ErrImagePull）
 
 `imagePullPolicy: Never` が設定されているか確認してください。
-ローカルでイメージがビルド済みか `docker images | grep hello-kubernetes` で確認できます。
+ローカルでイメージがビルド済みか `docker images | grep hello-k8s-web` で確認できます。
 
 ### NodePort に接続できない
 
 ```bash
-kubectl get svc hello-kubernetes
+kubectl get svc hello-k8s-service
 ```
 
-PORT 列に `80:30080/TCP` と表示されていることを確認してください。
+PORT 列に `8080:30080/TCP` と表示されていることを確認してください。

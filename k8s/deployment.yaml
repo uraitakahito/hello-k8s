@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-kubernetes
+  name: hello-k8s-deployment
 spec:
   replicas: 3
   selector:
@@ -13,8 +13,8 @@ spec:
         app: hello-kubernetes
     spec:
       containers:
-        - name: hello-kubernetes
-          image: hello-kubernetes:latest
+        - name: web-server
+          image: hello-k8s-web:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 80
