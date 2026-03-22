@@ -63,14 +63,14 @@ curl http://localhost:30080
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
-この方法は Service の ClusterIP に直接ルーティングされるため、ポート指定なし（= Service の `port: 80`）でアクセスします。
+この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
 方法 A の `:30080` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
-curl http://hello-k8s-service.default.svc.cluster.local
+curl http://hello-k8s-service.default.svc.cluster.local:8080
 ```
 
-またはブラウザで `http://hello-k8s-service.default.svc.cluster.local` を開きます。
+またはブラウザで `http://hello-k8s-service.default.svc.cluster.local:8080` を開きます。
 
 いずれかの方法で「Hello, Kubernetes!」が表示されれば成功です。
 
@@ -145,4 +145,4 @@ kubectl logs -l app=hello-kubernetes
 kubectl get svc hello-k8s-service
 ```
 
-PORT 列に `80:30080/TCP` と表示されていることを確認してください。
+PORT 列に `8080:30080/TCP` と表示されていることを確認してください。
