@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  # OrbStack 環境ではこの name がそのまま DNS になる
+  # → http://hello-k8s-service.default.svc.cluster.local でアクセス可能
   name: hello-k8s-service
 spec:
   type: NodePort
