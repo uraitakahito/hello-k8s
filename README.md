@@ -54,6 +54,8 @@ kubectl get pods -w
 
 **方法 A: NodePort でアクセス**
 
+ノードの 30080 番ポート経由で Service に到達します。
+
 ```bash
 curl http://localhost:30080
 ```
@@ -61,6 +63,8 @@ curl http://localhost:30080
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
+この方法は Service の ClusterIP に直接ルーティングされるため、ポート指定なし（= Service の `port: 80`）でアクセスします。
+方法 A の `:30080` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
 curl http://hello-k8s-service.default.svc.cluster.local
