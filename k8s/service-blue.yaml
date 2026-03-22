@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # OrbStack: http://hello-k8s-blue.default.svc.cluster.local:8080
+  name: hello-k8s-blue
+spec:
+  type: NodePort
+  selector:
+    app: hello-kubernetes
+    variant: blue
+  ports:
+    - port: 8080
+      targetPort: 80
+      nodePort: 30080

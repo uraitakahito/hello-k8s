@@ -1,6 +1,7 @@
 # Hello Kubernetes on OrbStack
 
-OrbStack の Kubernetes 機能を使って「Hello World」を動かすミニマル構成です。
+OrbStack の Kubernetes 機能を使い、**1つの Docker イメージから2種類の Web サービスを起動する**ミニマル構成です。
+`ENTRYPOINT` + `CMD` パターンにより、同一イメージでも起動引数で振る舞いを切り替えられることを体験します。
 
 ## 前提条件
 
@@ -20,11 +21,15 @@ kubectl get nodes
 ```
 .
 ├── app/
-│   ├── Dockerfile      # Nginx コンテナイメージ定義
-│   └── index.html      # Hello World ページ
+│   ├── Dockerfile             # Nginx イメージ（ENTRYPOINT + CMD パターン）
+│   ├── docker-entrypoint.sh   # CMD 引数で配信する HTML を切り替え
+│   ├── index-blue.html        # Blue 版ページ
+│   └── index-green.html       # Green 版ページ
 ├── k8s/
-│   ├── deployment.yaml # Deployment マニフェスト
-│   └── service.yaml    # Service (NodePort) マニフェスト
+│   ├── deployment-blue.yaml   # Blue Deployment（args: ["blue"]）
+│   ├── deployment-green.yaml  # Green Deployment（args: ["green"]）
+│   ├── service-blue.yaml      # Blue Service（NodePort 30080）
+│   └── service-green.yaml     # Green Service（NodePort 30081）
 └── README.md
 ```
 
@@ -32,7 +37,7 @@ kubectl get nodes
 
 ### 1. Docker イメージをビルド
 
-OrbStack 環境ではローカルビルドしたイメージを Kubernetes から直接参照できます。
+イメージは1つだけビルドします。Blue / Green 両方の HTML が含まれます。
 
 ```bash
 docker build -t hello-k8s-web:latest ./app
@@ -50,63 +55,80 @@ Pod が Running になるまで待ちます。
 kubectl get pods -w
 ```
 
+Blue 2つ、Green 2つの計4 Pod が起動します。
+
 ### 3. 動作確認
 
 **方法 A: NodePort でアクセス**
 
-ノードの 30080 番ポート経由で Service に到達します。
-
 ```bash
+# Blue（ポート 30080）
 curl http://localhost:30080
+
+# Green（ポート 30081）
+curl http://localhost:30081
 ```
 
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
 この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
-方法 A の `:30080` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
+方法 A の `:30080` / `:30081` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
-curl http://hello-k8s-service.default.svc.cluster.local:8080
+# Blue
+curl http://hello-k8s-blue.default.svc.cluster.local:8080
+
+# Green
+curl http://hello-k8s-green.default.svc.cluster.local:8080
 ```
 
-またはブラウザで `http://hello-k8s-service.default.svc.cluster.local:8080` を開きます。
+またはブラウザで上記 URL を開きます。
 
-いずれかの方法で「Hello, Kubernetes!」が表示されれば成功です。
+## 学習ポイント: ENTRYPOINT と CMD
 
-### 4. セルフヒーリングを体験する
+### Kubernetes レベル
 
-Deployment は `replicas` で指定した数の Pod を常に維持しようとします。
-Pod が消えても自動的に新しい Pod を起動してくれる、この仕組みを**セルフヒーリング（自己修復）**と呼びます。
+```yaml
+spec:
+  containers:
+    - name: web-server
+      image: hello-k8s-web:latest
+      args: ["green"]    # ← Dockerfile の CMD を上書き
+```
 
-まず、3つの Pod が Running であることを確認します。
+K8s の `args` は Docker の `CMD` に対応します。
+`command` は `ENTRYPOINT` に対応しますが、今回は ENTRYPOINT はそのまま使うため指定しません。
+
+| Docker       | Kubernetes | 本プロジェクトでの値          |
+|--------------|------------|-------------------------------|
+| `ENTRYPOINT` | `command`  | `/docker-entrypoint.sh`       |
+| `CMD`        | `args`     | `["blue"]` or `["green"]`     |
+
+## セルフヒーリングを体験する
+
+各 Deployment は `replicas: 2` で Pod を維持します。
+
+まず、variant ラベルで Pod を確認します。
 
 ```bash
-kubectl get pods
+kubectl get pods -l variant=blue
+kubectl get pods -l variant=green
 ```
 
-出力例:
-
-```
-NAME                                READY   STATUS    RESTARTS   AGE
-hello-k8s-deployment-xxxxxxxxxx-xxxxx   1/1     Running   0          60s
-hello-k8s-deployment-xxxxxxxxxx-yyyyy   1/1     Running   0          60s
-hello-k8s-deployment-xxxxxxxxxx-zzzzz   1/1     Running   0          60s
-```
-
-1つの Pod を手動で削除してみます。
+Blue の Pod を1つ削除してみます。
 
 ```bash
-kubectl delete pod <上の NAME から1つコピー>
+kubectl delete pod -l variant=blue --field-selector=status.phase=Running --grace-period=0 | head -1
 ```
 
-別ターミナルで監視すると、削除された Pod の代わりに新しい Pod が即座に作成される様子を観察できます。
+別ターミナルで監視すると、新しい Pod が即座に作成される様子を観察できます。
 
 ```bash
-kubectl get pods -w
+kubectl get pods -l variant=blue -w
 ```
 
-複数の Pod を同時に削除しても、全て削除しても、Deployment が `replicas: 3` の状態に自動復旧します。
+全ての Pod を削除しても、Deployment が `replicas: 2` の状態に自動復旧します。
 
 ```bash
 kubectl delete pods -l app=hello-kubernetes
@@ -142,7 +164,15 @@ kubectl logs -l app=hello-kubernetes
 ### NodePort に接続できない
 
 ```bash
-kubectl get svc hello-k8s-service
+kubectl get svc
 ```
 
-PORT 列に `8080:30080/TCP` と表示されていることを確認してください。
+Blue は `8080:30080/TCP`、Green は `8080:30081/TCP` と表示されていることを確認してください。
+
+### entrypoint のエラー
+
+Pod のログに `Error: unknown variant` と出ている場合、`args` の値が `blue` または `green` であることを確認してください。
+
+```bash
+kubectl logs -l app=hello-kubernetes
+```
