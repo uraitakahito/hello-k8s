@@ -37,8 +37,6 @@ kubectl get nodes
 
 ### 1. Docker イメージをビルド
 
-イメージは1つだけビルドします。Blue / Green 両方の HTML が含まれます。
-
 ```bash
 docker build -t hello-k8s-web:latest ./app
 ```
