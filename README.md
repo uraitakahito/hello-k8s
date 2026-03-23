@@ -141,6 +141,12 @@ kubectl get pods -w
 kubectl delete -f k8s/
 ```
 
+マニフェストファイルを指定せず、全ての Deployment と Service をまとめて削除する場合は以下でも可能です。
+
+```bash
+kubectl delete deployment,svc --all
+```
+
 Docker イメージも不要であれば削除します。
 
 ```bash
