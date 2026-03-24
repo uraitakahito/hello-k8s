@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-k8s-green
+  namespace: hello-k8s
 spec:
   replicas: 2
   selector:
