@@ -193,3 +193,7 @@ kubectl delete ns hello-k8s
 ```bash
 kubectl delete -k k8s/
 ```
+
+## 参考
+
+- [hello-k8s-logging](https://github.com/uraitakahito/hello-k8s-logging) — Kubernetes でのロギング構成
