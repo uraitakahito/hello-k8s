@@ -144,33 +144,3 @@ kubectl delete -f k8s/
 ```bash
 kubectl delete deployment,svc --all
 ```
-
-## トラブルシューティング
-
-### Pod が起動しない
-
-```bash
-kubectl describe pod -l app=hello-kubernetes
-kubectl logs -l app=hello-kubernetes
-```
-
-### イメージが見つからない（ErrImagePull）
-
-`imagePullPolicy: Never` が設定されているか確認してください。
-ローカルでイメージがビルド済みか `docker images | grep hello-k8s-web` で確認できます。
-
-### NodePort に接続できない
-
-```bash
-kubectl get svc
-```
-
-Blue は `8080:30080/TCP`、Green は `8080:30081/TCP` と表示されていることを確認してください。
-
-### entrypoint のエラー
-
-Pod のログに `Error: unknown variant` と出ている場合、`args` の値が `blue` または `green` であることを確認してください。
-
-```bash
-kubectl logs -l app=hello-kubernetes
-```
