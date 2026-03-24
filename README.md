@@ -176,7 +176,7 @@ kubectl get pods -n hello-k8s -l variant=blue -w
 全ての Pod を削除しても、Deployment が `replicas: 2` の状態に自動復旧します。
 
 ```bash
-kubectl delete pods -n hello-k8s -l app=hello-kubernetes
+kubectl delete pods -n hello-k8s -l app=hello-k8s
 kubectl get pods -n hello-k8s -w
 ```
 
@@ -193,3 +193,7 @@ kubectl delete ns hello-k8s
 ```bash
 kubectl delete -k k8s/
 ```
+
+## 参考
+
+- [hello-k8s-logging](https://github.com/uraitakahito/hello-k8s-logging) — Kubernetes でのロギング構成
