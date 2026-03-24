@@ -1,7 +1,6 @@
 # Hello Kubernetes on OrbStack
 
-OrbStack の Kubernetes 機能を使い、**1つの Docker イメージから2種類の Web サービスを起動する** 構成です。
-`ENTRYPOINT` + `CMD` パターンにより、同一イメージでも起動引数で振る舞いを切り替えられることを体験します。
+**1つの Docker イメージから2種類の Web サービスを起動する** 構成です。
 
 ## 前提条件
 
