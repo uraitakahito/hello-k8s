@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  # OrbStack: http://hello-k8s-blue.hello-k8s.svc.cluster.local:8080
-  name: hello-k8s-blue
+  # OrbStack: http://blue.hello-k8s.svc.cluster.local:8080
+  name: blue
 spec:
   type: NodePort
   selector:
