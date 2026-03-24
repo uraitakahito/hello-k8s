@@ -145,12 +145,6 @@ kubectl delete -f k8s/
 kubectl delete deployment,svc --all
 ```
 
-Docker イメージも不要であれば削除します。
-
-```bash
-docker rmi hello-k8s-web
-```
-
 ## トラブルシューティング
 
 ### Pod が起動しない
