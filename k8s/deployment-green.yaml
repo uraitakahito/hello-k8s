@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web-server
-          image: hello-k8s-web:latest
+          image: hello-k8s-web
           imagePullPolicy: Never
           args: ["green"]
           ports:
