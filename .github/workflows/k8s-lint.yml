@@ -19,4 +19,4 @@ jobs:
             | tar xz -C /usr/local/bin
 
       - name: Validate manifests
-        run: kubeconform -strict -summary k8s/
+        run: kubectl kustomize k8s/ | kubeconform -strict -summary
