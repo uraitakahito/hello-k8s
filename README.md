@@ -38,7 +38,7 @@ kubectl get nodes
 ### 1. Docker イメージをビルド
 
 ```bash
-docker build -t hello-k8s-web:latest ./app
+docker build -t hello-k8s-web ./app
 ```
 
 ### 2. Kubernetes にデプロイ
@@ -91,7 +91,7 @@ curl http://hello-k8s-green.default.svc.cluster.local:8080
 spec:
   containers:
     - name: web-server
-      image: hello-k8s-web:latest
+      image: hello-k8s-web
       args: ["green"]    # ← Dockerfile の CMD を上書き
 ```
 
@@ -148,7 +148,7 @@ kubectl delete deployment,svc --all
 Docker イメージも不要であれば削除します。
 
 ```bash
-docker rmi hello-k8s-web:latest
+docker rmi hello-k8s-web
 ```
 
 ## トラブルシューティング
