@@ -25,10 +25,10 @@ kubectl get nodes
 │   ├── index-blue.html
 │   └── index-green.html
 ├── k8s/
-│   ├── kustomization.yaml     # Kustomize 設定（namespace 一括注入・適用順制御）
-│   ├── namespace.yaml         # demo Namespace
-│   ├── deployment-blue.yaml   # Blue Deployment（env VARIANT=blue）
-│   ├── deployment-green.yaml  # Green Deployment（env VARIANT=green）
+│   ├── kustomization.yaml
+│   ├── namespace.yaml
+│   ├── deployment-blue.yaml
+│   ├── deployment-green.yaml
 │   ├── service-blue.yaml      # Blue Service（NodePort 30080）
 │   └── service-green.yaml     # Green Service（NodePort 30081）
 └── README.md
