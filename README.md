@@ -1,4 +1,4 @@
-# Hello Kubernetes on OrbStack
+# Hello Kubernetes
 
 **1つの Docker イメージから2種類の Web サービスを起動する** 構成です。
 
