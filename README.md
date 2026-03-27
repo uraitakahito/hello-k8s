@@ -20,10 +20,10 @@ kubectl get nodes
 ```
 .
 ├── app/
-│   ├── Dockerfile             # Nginx イメージ（ENTRYPOINT + CMD パターン）
+│   ├── Dockerfile             # Nginx イメージ
 │   ├── docker-entrypoint.sh   # 環境変数 VARIANT で配信する HTML を切り替え
-│   ├── index-blue.html        # Blue 版ページ
-│   └── index-green.html       # Green 版ページ
+│   ├── index-blue.html
+│   └── index-green.html
 ├── k8s/
 │   ├── kustomization.yaml     # Kustomize 設定（namespace 一括注入・適用順制御）
 │   ├── namespace.yaml         # hello-k8s Namespace
