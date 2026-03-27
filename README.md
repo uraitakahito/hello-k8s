@@ -169,16 +169,16 @@ Liveness Probe が失敗すると、kubelet がコンテナを再起動します
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: demo
-resources:                     # 適用するマニフェストと順序を定義
+resources:                     # 適用するマニフェストを定義
   - namespace.yaml
-  - deployment-blue.yaml
+  - service-blue.yaml
   - ...
 ```
 
 Kustomize を使うことで、以下のメリットがあります。
 
 - **namespace の一括注入**: 個々のマニフェストに `namespace:` を書く必要がない
-- **適用順の制御**: `resources:` の記載順でマニフェストが適用される（Namespace → Deployment → Service）
+- **適用順の自動決定**: Kustomize が [Kind ベースの組み込みソート順（legacy sort）](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/sortoptions/) で適用順を決定する（Namespace → Service → Deployment）。`resources:` の記載順は適用順に影響しない
 - **ビルド結果の確認**: `kubectl kustomize k8s/` で適用前に最終的な YAML を確認できる
 
 ### kubectl apply -f と -k の違い
@@ -186,7 +186,7 @@ Kustomize を使うことで、以下のメリットがあります。
 | コマンド | 動作 |
 |----------|------|
 | `kubectl apply -f k8s/` | ディレクトリ内の YAML をアルファベット順にそのまま適用 |
-| `kubectl apply -k k8s/` | Kustomize で変換してから適用（namespace 注入・順序制御あり） |
+| `kubectl apply -k k8s/` | Kustomize で変換してから適用（namespace 注入・Kind ベースの自動ソートあり） |
 
 ## セルフヒーリングを体験する
 
