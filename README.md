@@ -148,13 +148,6 @@ Liveness Probe が失敗すると、kubelet がコンテナを再起動します
 
 ## Kustomize
 
-### kubectl apply -f と -k の違い
-
-| コマンド | 動作 |
-|----------|------|
-| `kubectl apply -f k8s/` | ディレクトリ内の YAML をアルファベット順にそのまま適用 |
-| `kubectl apply -k k8s/` | Kustomize で変換してから適用（namespace 注入・Kind ベースの自動ソートあり） |
-
 ## セルフヒーリングを体験する
 
 各 Deployment は `replicas: 2` で Pod を維持します。
