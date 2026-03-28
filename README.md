@@ -109,7 +109,7 @@ Mac のルーティングテーブルを確認すると、OrbStack が ClusterIP
 netstat -rn | grep 192.168.194
 ```
 
-## 学習ポイント: Liveness / Readiness Probe
+## Liveness / Readiness Probe
 
 Kubernetes は Pod 内のコンテナが正常かどうかを **Probe（ヘルスチェック）** で監視します。
 
