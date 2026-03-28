@@ -92,10 +92,6 @@ web-blue    NodePort   10.96.xxx.xxx   8080:30080/TCP   5m
 web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
 ```
 
-`CLUSTER-IP` 列が各 Service に割り当てられた仮想 IP です。
-
-> **注意:** `docker ps` では ClusterIP は表示されません。ClusterIP は Kubernetes のネットワーク層で管理されており、Docker のコンテナレベルからは見えません。
-
 DNS 名 (`web-blue.demo.svc.cluster.local`) は、この ClusterIP に解決されます。
 
 ```bash
