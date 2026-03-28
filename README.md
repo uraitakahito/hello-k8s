@@ -75,8 +75,6 @@ curl http://web-blue.demo.svc.cluster.local:8080
 curl http://web-green.demo.svc.cluster.local:8080
 ```
 
-またはブラウザで上記 URL を開きます。
-
 ## 学習ポイント: ENTRYPOINT と CMD
 
 ### Kubernetes レベル
