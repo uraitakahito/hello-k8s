@@ -49,8 +49,6 @@ Pod が Running になるまで待ちます。
 kubectl get pods -n demo -w
 ```
 
-Blue 2つ、Green 2つの計4 Pod が起動します。
-
 ### 3. 動作確認
 
 **方法 A: NodePort でアクセス**
