@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  # OrbStack: http://blue.demo.svc.cluster.local:8080
-  name: blue
+  # OrbStack: http://web-blue.demo.svc.cluster.local:8080
+  name: web-blue
 spec:
   type: NodePort
   selector:
