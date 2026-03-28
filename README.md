@@ -43,7 +43,6 @@ kubectl apply -k k8s/
 ```
 
 `demo` Namespace が作成され、その中にリソースがデプロイされます。
-Pod が Running になるまで待ちます。
 
 ```bash
 kubectl get pods -n demo -w
