@@ -83,7 +83,7 @@ curl http://web-green.demo.svc.cluster.local:8080
 Service を作成すると、Kubernetes が **ClusterIP**（クラスタ内部でのみ有効な仮想 IP）を自動的に割り当てます。
 ClusterIP はどのノードにも Pod にも紐づかず、一般的な Kubernetes では kube-proxy が iptables / IPVS ルールで実現しています。
 
-> **注意:** OrbStack は kube-proxy を使用していません。独自の軽量ネットワークスタックが VM レベルで Service ルーティングを処理しています（`kubectl get pods -n kube-system` で確認すると kube-proxy の Pod は存在しません）。
+> **注意:** OrbStack は kube-proxy を使用していません。独自の軽量ネットワークスタックが VM レベルで Service ルーティングを処理しています。
 
 ```bash
 kubectl get svc -n demo
