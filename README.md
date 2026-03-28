@@ -85,11 +85,8 @@ ClusterIP はどのノードにも Pod にも紐づかず、一般的な Kuberne
 
 > **注意:** OrbStack は kube-proxy を使用していません。独自の軽量ネットワークスタックが VM レベルで Service ルーティングを処理しています。
 
-```bash
-kubectl get svc -n demo
-```
-
-```
+```console
+% kubectl get svc -n demo
 NAME        TYPE       CLUSTER-IP      PORT(S)          AGE
 web-blue    NodePort   10.96.xxx.xxx   8080:30080/TCP   5m
 web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
