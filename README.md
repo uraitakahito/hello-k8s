@@ -36,6 +36,8 @@ docker build -t hello-k8s-web ./app
 
 ### 2. Kubernetes にデプロイ
 
+`-k` で Kustomize で変換を行い、Kindベースのソート順で適用:
+
 ```bash
 kubectl apply -k k8s/
 ```
