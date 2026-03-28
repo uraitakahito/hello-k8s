@@ -148,8 +148,6 @@ Liveness Probe が失敗すると、kubelet がコンテナを再起動します
 
 ## Kustomize
 
-本プロジェクトでは [Kustomize](https://kustomize.io/) を使ってマニフェストを管理しています。
-
 ### kubectl apply -f と -k の違い
 
 | コマンド | 動作 |
