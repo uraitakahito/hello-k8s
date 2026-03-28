@@ -99,6 +99,24 @@ web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
 
 DNS 名 (`web-blue.demo.svc.cluster.local`) は、この ClusterIP に解決されます。
 
+### OrbStack 環境での ClusterIP アクセス
+
+通常、ClusterIP はクラスタ内部でのみ有効な仮想 IP であり、ホストマシンから直接アクセスすることはできません。
+しかし OrbStack は Mac → クラスタネットワーク間のブリッジを透過的に提供しているため、あたかもローカルの IP のようにアクセスできます。
+
+```bash
+# Mac から ClusterIP に直接アクセスできる
+curl http://192.168.194.174:8080
+```
+
+Mac のルーティングテーブルを確認すると、OrbStack が ClusterIP レンジへの経路を `bridge101`（仮想ブリッジ）経由で追加していることがわかります。
+
+```bash
+netstat -rn | grep 192.168.194
+```
+
+> **注意:** Docker Desktop や minikube など他の Kubernetes 環境では、ClusterIP にホストから直接アクセスすることはできません。これは OrbStack 固有の機能です。
+
 ## 学習ポイント: Liveness / Readiness Probe
 
 Kubernetes は Pod 内のコンテナが正常かどうかを **Probe（ヘルスチェック）** で監視します。
