@@ -4,11 +4,16 @@ metadata:
   # OrbStack: http://web-green.demo.svc.cluster.local:8080
   name: web-green
 spec:
+  # ClusterIP の機能に加え、ノード上のポート（30000–32767）を公開する
+  # クラスタ外部から localhost:<nodePort> でアクセス可能になる
   type: NodePort
   selector:
     app: web
     variant: green
   ports:
+      # Service の ClusterIP が受け付けるポート（クラスタ内部からのアクセス用）
     - port: 8080
+      # Pod（Nginx）が実際に listen しているポート
       targetPort: 80
+      # ノード上で公開するポート（クラスタ外部から localhost:30081 でアクセス）
       nodePort: 30081
