@@ -78,7 +78,7 @@ curl http://web-blue.demo.svc.cluster.local:8080
 curl http://web-green.demo.svc.cluster.local:8080
 ```
 
-## 学習ポイント: ClusterIP
+## ClusterIP
 
 Service を作成すると、Kubernetes が **ClusterIP**（クラスタ内部でのみ有効な仮想 IP）を自動的に割り当てます。
 ClusterIP はどのノードにも Pod にも紐づかず、一般的な Kubernetes では kube-proxy が iptables / IPVS ルールで実現しています。
