@@ -7,14 +7,6 @@
 - [OrbStack](https://orbstack.dev/) がインストール済み
 - OrbStack の Kubernetes が有効（Settings → Kubernetes → Enable Kubernetes）
 
-有効化すると `kubectl` が自動的に使えるようになります。
-
-```bash
-kubectl get nodes
-```
-
-ノードが表示されれば準備完了です。
-
 ## プロジェクト構成
 
 ```
