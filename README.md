@@ -1,6 +1,6 @@
 # Hello Kubernetes
 
-**1つの Docker イメージから2種類の Web サービスを起動する** シンプルなKubernetesの事例です。
+1つの Docker イメージから2種類の Web サービスを起動するシンプルなKubernetesの事例です。
 
 ## 前提条件
 
