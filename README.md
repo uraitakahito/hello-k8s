@@ -99,6 +99,14 @@ web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
 
 DNS 名 (`web-blue.demo.svc.cluster.local`) は、この ClusterIP に解決されます。
 
+OrbStack 環境では Mac から DNS 解決を確認できます。
+
+```bash
+dscacheutil -q host -a name web-blue.demo.svc.cluster.local
+```
+
+> **注意:** `dig` コマンドでは解決できません。OrbStack の DNS は macOS のシステムリゾルバ（`/etc/resolver/` 配下のドメイン別設定）を通じて提供されているため、システムリゾルバを使う `dscacheutil` を使います。
+
 ### OrbStack 環境での ClusterIP アクセス
 
 通常、ClusterIP はクラスタ内部でのみ有効な仮想 IP であり、ホストマシンから直接アクセスすることはできません。
