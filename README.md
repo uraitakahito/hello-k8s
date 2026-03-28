@@ -99,8 +99,6 @@ web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
 
 DNS 名 (`web-blue.demo.svc.cluster.local`) は、この ClusterIP に解決されます。
 
-OrbStack 環境では Mac から DNS 解決を確認できます。
-
 ```bash
 dscacheutil -q host -a name web-blue.demo.svc.cluster.local
 ```
