@@ -63,8 +63,12 @@ curl http://localhost:30081
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
+
+```
+<Service名>.<Namespace名>.svc.cluster.local
+```
+
 この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
-方法 A の `:30080` / `:30081` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
 # Blue
@@ -73,43 +77,6 @@ curl http://web-blue.demo.svc.cluster.local:8080
 # Green
 curl http://web-green.demo.svc.cluster.local:8080
 ```
-
-## 学習ポイント: ENTRYPOINT と CMD
-
-### Kubernetes レベル
-
-```yaml
-spec:
-  containers:
-    - name: web-server
-      image: hello-k8s-web
-      env:
-        - name: VARIANT
-          value: "green"
-```
-
-ENTRYPOINT と CMD はそのまま使い、環境変数 `VARIANT` で配信する HTML を切り替えます。
-
-| Docker       | Kubernetes | 本プロジェクトでの値                    |
-|--------------|------------|----------------------------------------|
-| `ENTRYPOINT` | `command`  | `/docker-entrypoint.sh`（変更なし）      |
-| `CMD`        | `args`     | `["nginx", "-g", "daemon off;"]`（変更なし） |
-| 環境変数      | `env`      | `VARIANT=blue` or `VARIANT=green`       |
-
-## 学習ポイント: Namespace と DNS
-
-Kubernetes の Service には、以下の形式で DNS 名が自動的に割り当てられます。
-
-```
-<Service名>.<Namespace名>.svc.cluster.local
-```
-
-本プロジェクトでは `demo` Namespace を使っているため、DNS 名は次のようになります。
-
-| Service | DNS 名 |
-|---------|--------|
-| `web-blue` | `web-blue.demo.svc.cluster.local` |
-| `web-green` | `web-green.demo.svc.cluster.local` |
 
 ## 学習ポイント: ClusterIP
 
@@ -131,6 +98,30 @@ web-green   NodePort   10.96.xxx.xxx   8080:30081/TCP   5m
 > **注意:** `docker ps` では ClusterIP は表示されません。ClusterIP は Kubernetes のネットワーク層で管理されており、Docker のコンテナレベルからは見えません。
 
 DNS 名 (`web-blue.demo.svc.cluster.local`) は、この ClusterIP に解決されます。
+
+```bash
+dscacheutil -q host -a name web-blue.demo.svc.cluster.local
+```
+
+> **注意:** `dig` コマンドでは解決できません。OrbStack の DNS は macOS のシステムリゾルバ（`/etc/resolver/` 配下のドメイン別設定）を通じて提供されているため、システムリゾルバを使う `dscacheutil` を使います。
+
+### OrbStack 環境での ClusterIP アクセス
+
+通常、ClusterIP はクラスタ内部でのみ有効な仮想 IP であり、ホストマシンから直接アクセスすることはできません。
+しかし OrbStack は Mac → クラスタネットワーク間のブリッジを透過的に提供しているため、あたかもローカルの IP のようにアクセスできます。
+
+```bash
+# Mac から ClusterIP に直接アクセスできる
+curl http://192.168.194.174:8080
+```
+
+Mac のルーティングテーブルを確認すると、OrbStack が ClusterIP レンジへの経路を `bridge101`（仮想ブリッジ）経由で追加していることがわかります。
+
+```bash
+netstat -rn | grep 192.168.194
+```
+
+> **注意:** Docker Desktop や minikube など他の Kubernetes 環境では、ClusterIP にホストから直接アクセスすることはできません。これは OrbStack 固有の機能です。
 
 ## 学習ポイント: Liveness / Readiness Probe
 
