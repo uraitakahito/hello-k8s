@@ -63,6 +63,11 @@ curl http://localhost:30081
 **方法 B: OrbStack のドメインでアクセス（推奨）**
 
 OrbStack では Service 名でアクセスできます。
+
+```
+<Service名>.<Namespace名>.svc.cluster.local
+```
+
 この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
 
 ```bash
@@ -72,21 +77,6 @@ curl http://web-blue.demo.svc.cluster.local:8080
 # Green
 curl http://web-green.demo.svc.cluster.local:8080
 ```
-
-## 学習ポイント: Namespace と DNS
-
-Kubernetes の Service には、以下の形式で DNS 名が自動的に割り当てられます。
-
-```
-<Service名>.<Namespace名>.svc.cluster.local
-```
-
-本プロジェクトでは `demo` Namespace を使っているため、DNS 名は次のようになります。
-
-| Service | DNS 名 |
-|---------|--------|
-| `web-blue` | `web-blue.demo.svc.cluster.local` |
-| `web-green` | `web-green.demo.svc.cluster.local` |
 
 ## 学習ポイント: ClusterIP
 
