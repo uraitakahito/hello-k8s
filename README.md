@@ -64,7 +64,6 @@ curl http://localhost:30081
 
 OrbStack では Service 名でアクセスできます。
 この方法は Service の ClusterIP に直接ルーティングされるため、Service の `port: 8080` を指定してアクセスします。
-方法 A の `:30080` / `:30081` は NodePort（ノード上の公開ポート）なので、ここでは使いません。
 
 ```bash
 # Blue
