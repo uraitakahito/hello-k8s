@@ -73,28 +73,6 @@ curl http://web-blue.demo.svc.cluster.local:8080
 curl http://web-green.demo.svc.cluster.local:8080
 ```
 
-## 学習ポイント: ENTRYPOINT と CMD
-
-### Kubernetes レベル
-
-```yaml
-spec:
-  containers:
-    - name: web-server
-      image: hello-k8s-web
-      env:
-        - name: VARIANT
-          value: "green"
-```
-
-ENTRYPOINT と CMD はそのまま使い、環境変数 `VARIANT` で配信する HTML を切り替えます。
-
-| Docker       | Kubernetes | 本プロジェクトでの値                    |
-|--------------|------------|----------------------------------------|
-| `ENTRYPOINT` | `command`  | `/docker-entrypoint.sh`（変更なし）      |
-| `CMD`        | `args`     | `["nginx", "-g", "daemon off;"]`（変更なし） |
-| 環境変数      | `env`      | `VARIANT=blue` or `VARIANT=green`       |
-
 ## 学習ポイント: Namespace と DNS
 
 Kubernetes の Service には、以下の形式で DNS 名が自動的に割り当てられます。
