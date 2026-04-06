@@ -197,7 +197,7 @@ kubectl get pods -n demo -l variant=blue
 Blue の Pod を1つ削除してみます。
 
 ```bash
-kubectl delete pod -n demo -l variant=blue --field-selector=status.phase=Running --grace-period=0 | head -1
+kubectl get pods -n demo -l variant=blue -o name | head -1 | xargs kubectl delete -n demo --grace-period=0
 ```
 
 別ターミナルで監視すると、新しい Pod が即座に作成される様子を観察できます。
