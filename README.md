@@ -68,12 +68,6 @@ graph TB
     curl_dns -->|"② mDNS → ClusterIP<br/>（OrbStack が Mac→ClusterIP 間を<br/>仮想ブリッジで透過的に接続）"| cp
 ```
 
-| ポート | 誰が listen | 用途 |
-|--------|------------|------|
-| **30080 / 30081** (nodePort) | ノード | クラスタ外部からのアクセス入口 |
-| **8080** (port) | Service の ClusterIP | クラスタ内部からのアクセス入口 |
-| **80** (targetPort) | Pod 内の Nginx | 実際にリクエストを処理 |
-
 ## 手順
 
 ### 1. Docker イメージをビルド
