@@ -65,7 +65,7 @@ graph TB
     end
 
     curl_np -->|"① NodePort"| np
-    curl_dns -->|"② mDNS → ClusterIP"| cp
+    curl_dns -->|"② mDNS → ClusterIP<br/>（OrbStack が Mac→ClusterIP 間を<br/>仮想ブリッジで透過的に接続）"| cp
 ```
 
 | ポート | 誰が listen | 用途 |
