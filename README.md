@@ -192,7 +192,6 @@ Liveness Probe が失敗すると、kubelet がコンテナを再起動します
 
 ```bash
 kubectl get pods -n demo -l variant=blue
-kubectl get pods -n demo -l variant=green
 ```
 
 Blue の Pod を1つ削除してみます。
