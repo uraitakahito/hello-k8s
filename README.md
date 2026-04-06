@@ -26,6 +26,54 @@
 └── README.md
 ```
 
+## アーキテクチャ
+
+```mermaid
+graph TB
+    subgraph Mac["Mac（ホストマシン）"]
+        curl_np["curl localhost:30080"]
+        curl_dns["curl web-blue.demo.svc.cluster.local:8080"]
+    end
+
+    subgraph Cluster["Kubernetes クラスタ（OrbStack VM）"]
+        subgraph SvcBlue["Service: web-blue（NodePort）"]
+            np["nodePort: 30080"]
+            cp["ClusterIP:8080"]
+            np --> cp
+        end
+
+        subgraph SvcGreen["Service: web-green（NodePort）"]
+            np2["nodePort: 30081"]
+            cp2["ClusterIP:8080"]
+            np2 --> cp2
+        end
+
+        subgraph PodsBlue["deploy-blue（replicas: 2）"]
+            pb1["Pod: Nginx :80<br/>variant=blue"]
+            pb2["Pod: Nginx :80<br/>variant=blue"]
+        end
+
+        subgraph PodsGreen["deploy-green（replicas: 2）"]
+            pg1["Pod: Nginx :80<br/>variant=green"]
+            pg2["Pod: Nginx :80<br/>variant=green"]
+        end
+
+        cp --> pb1
+        cp --> pb2
+        cp2 --> pg1
+        cp2 --> pg2
+    end
+
+    curl_np -->|"① NodePort"| np
+    curl_dns -->|"② mDNS → ClusterIP"| cp
+```
+
+| ポート | 誰が listen | 用途 |
+|--------|------------|------|
+| **30080 / 30081** (nodePort) | ノード | クラスタ外部からのアクセス入口 |
+| **8080** (port) | Service の ClusterIP | クラスタ内部からのアクセス入口 |
+| **80** (targetPort) | Pod 内の Nginx | 実際にリクエストを処理 |
+
 ## 手順
 
 ### 1. Docker イメージをビルド
