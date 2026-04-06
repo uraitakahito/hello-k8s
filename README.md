@@ -68,12 +68,6 @@ graph TB
     curl_dns -->|"② mDNS → ClusterIP<br/>（OrbStack が Mac→ClusterIP 間を<br/>仮想ブリッジで透過的に接続）"| cp
 ```
 
-| ポート | 誰が listen | 用途 |
-|--------|------------|------|
-| **30080 / 30081** (nodePort) | ノード | クラスタ外部からのアクセス入口 |
-| **8080** (port) | Service の ClusterIP | クラスタ内部からのアクセス入口 |
-| **80** (targetPort) | Pod 内の Nginx | 実際にリクエストを処理 |
-
 ## 手順
 
 ### 1. Docker イメージをビルド
@@ -103,9 +97,6 @@ kubectl get pods -n demo -w
 ```bash
 # Blue（ポート 30080）
 curl http://localhost:30080
-
-# Green（ポート 30081）
-curl http://localhost:30081
 ```
 
 **方法 B: OrbStack のドメインでアクセス（推奨）**
@@ -121,9 +112,6 @@ OrbStack では Service 名でアクセスできます。
 ```bash
 # Blue
 curl http://web-blue.demo.svc.cluster.local:8080
-
-# Green
-curl http://web-green.demo.svc.cluster.local:8080
 ```
 
 ## ClusterIP
@@ -204,13 +192,12 @@ Liveness Probe が失敗すると、kubelet がコンテナを再起動します
 
 ```bash
 kubectl get pods -n demo -l variant=blue
-kubectl get pods -n demo -l variant=green
 ```
 
 Blue の Pod を1つ削除してみます。
 
 ```bash
-kubectl delete pod -n demo -l variant=blue --field-selector=status.phase=Running --grace-period=0 | head -1
+kubectl get pods -n demo -l variant=blue -o name | head -1 | xargs kubectl delete -n demo --grace-period=0
 ```
 
 別ターミナルで監視すると、新しい Pod が即座に作成される様子を観察できます。
