@@ -97,9 +97,6 @@ kubectl get pods -n demo -w
 ```bash
 # Blue（ポート 30080）
 curl http://localhost:30080
-
-# Green（ポート 30081）
-curl http://localhost:30081
 ```
 
 **方法 B: OrbStack のドメインでアクセス（推奨）**
@@ -115,9 +112,6 @@ OrbStack では Service 名でアクセスできます。
 ```bash
 # Blue
 curl http://web-blue.demo.svc.cluster.local:8080
-
-# Green
-curl http://web-green.demo.svc.cluster.local:8080
 ```
 
 ## ClusterIP
