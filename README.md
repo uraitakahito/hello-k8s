@@ -12,7 +12,7 @@
 ```
 .
 ├── app/
-│   ├── Dockerfile             # Nginx イメージ
+│   ├── Dockerfile
 │   ├── docker-entrypoint.sh   # 環境変数 VARIANT で配信する HTML を切り替え
 │   ├── index-blue.html
 │   └── index-green.html
